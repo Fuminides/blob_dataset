@@ -119,7 +119,10 @@ def gen_dataset(instances, image_size, destination_path):
 	for ix in range(instances):
 		image = init_images[ix]
 		new_image, small, n_blobs = gen_random_blob(image)
-		new_image = gaussian_filter(new_image, sigma=1)
+		
+		if np.random.rand(1) < 0.3:
+			new_image = gaussian_filter(new_image, sigma=1)
+
 		y_file.iloc[ix, 0] = n_blobs
 		y_file.iloc[ix, 1] = small
 		img = Image.fromarray(np.uint8(new_image * 255))
