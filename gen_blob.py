@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from PIL import Image
-
+from scipy.ndimage import gaussian_filter
 
 def random_image(size):
 	'''
@@ -48,7 +48,7 @@ def get_size_params(size):
 	if np.equal(size, [32, 32]).all():
 		return {'sample_size': 10000, 'small': 0.2, 'big': 5}
 	elif np.equal(size, [256, 256]).all():
-		return {'sample_size': 500000, 'small': 30, 'big': 300}
+		return {'sample_size': 100000, 'small': 30, 'big': 300}
 
 
 
@@ -119,7 +119,7 @@ def gen_dataset(instances, image_size, destination_path):
 	for ix in range(instances):
 		image = init_images[ix]
 		new_image, small, n_blobs = gen_random_blob(image)
-
+		new_image = gaussian_filter(new_image, sigma=1)
 		y_file.iloc[ix, 0] = n_blobs
 		y_file.iloc[ix, 1] = small
 		img = Image.fromarray(np.uint8(new_image * 255))
@@ -130,7 +130,11 @@ def gen_dataset(instances, image_size, destination_path):
 
 
 if __name__ == '__main__':
-	gen_dataset(1000, [256, 256], './trials/')	
+	import sys
+
+	dataset_size = int(sys.argv[1])
+	image_size = int(sys.argv[2])
+	gen_dataset(dataset_size, [image_size, image_size], './trials/')	
 
 
 
