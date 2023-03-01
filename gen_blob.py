@@ -137,6 +137,9 @@ if __name__ == '__main__':
 
 	dataset_size = int(sys.argv[1])
 	image_size = int(sys.argv[2])
+
+	print('Generating ' + str(dataset_size) + 'images of size ' + str(image_size) + 'x' + str(image_size) + '...')
+
 	gen_dataset(dataset_size, [image_size, image_size], './trials/')	
 
 

@@ -50,7 +50,7 @@ class LeNet(nn.Module):
             output_block_1 = self.batch_norm_1(output_block_1)
 
         if self.training:
-          h = x.register_hook(self.activations_hook)
+          h = output_block_1.register_hook(self.activations_hook)
 
         output_flattened = self.flatten(output_block_1)
         output_fc_0 = self.relu(self.fc_0(output_flattened))
@@ -59,27 +59,28 @@ class LeNet(nn.Module):
         output_fc_1 = self.dropout1d(output_fc_1)
         predictions = self.fc_2(output_fc_1)  # Softmax will be applied to this value
         return predictions
-
+      
     def get_activations_gradient(self):
         return self.gradients
 
     # hook for the gradients of the activations
     def activations_hook(self, grad):
         self.gradients = grad
-
+      
     def get_activations(self, x):
       output_block_0 = self.pool_0(self.relu(self.conv_0(x)))
       output_block_0 = self.dropout2d(output_block_0)
       if self.use_batch_norm:
-          output_block_0 = self.batch_norm_0(output_block_0)
+            output_block_0 = self.batch_norm_0(output_block_0)
       output_block_1 = self.pool_1(self.relu(self.conv_1(output_block_0)))
       output_block_1 = self.dropout2d(output_block_1)
       if self.use_batch_norm:
           output_block_1 = self.batch_norm_1(output_block_1)
+      
       return output_block_1
 
 # Define the model
-class Net(nn.Module):
+class BasicNet(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
