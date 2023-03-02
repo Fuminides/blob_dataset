@@ -124,32 +124,7 @@ class BasicNet(nn.Module):
       x = self.pool1(x)
       x = self.conv2(x)
       return x
-
-
-    
-      
-    
-
-    
-
-    def get_saliency_map2(self, image, target_class_index):
-        self.eval()
-        og_shape = image.shape
-        image = image.requires_grad_(True)
-        output = self(image)
-        loss = -output[0, target_class_index]
-        self.zero_grad()
-        loss.backward()
-        saliency = image.grad
         
-        return saliency[0]
-        
-
-def plot_grad_cam(model, image, target_class_index):
-        heatmap = model.get_gradcam(image, target_class_index)
-
-        return (heatmap* 0.7 +  image*0.3).permute(1, 2, 0)
-
 
 def get_gradcam(model, image, target_class_index):
         # set the evaluation mode
@@ -178,7 +153,7 @@ def get_gradcam(model, image, target_class_index):
             activations[i, :, :] *= pooled_gradients[i]
             
         # average the channels of the activations
-        heatmap = torch.mean(activations, dim=0).squeeze()
+        heatmap = torch.mean(activations, dim=1).squeeze().cpu()
 
         # relu on top of the heatmap
         # expression (2) in https://arxiv.org/pdf/1610.02391.pdf
@@ -189,40 +164,3 @@ def get_gradcam(model, image, target_class_index):
         
         return heatmap
 
-
-model = LeNet()
-
-# Define the loss function and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
-
-# Train the model
-def train(model, criterion, optimizer, train_loader, epoch):
-    model.train()
-    for batch_idx, (data, target) in enumerate(train_loader):
-        optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
-        loss.backward()
-        optimizer.step()
-
-
-# Evaluate the model on the test data
-def test(model, test_loader):
-    model.eval()
-    test_loss = 0
-    correct = 0
-    with torch.no_grad():
-        for data, target in test_loader:
-            output = model(data)
-            test_loss += criterion(output, target).item()
-            pred = output.data.max(1, keepdim=True)[1]
-            correct += pred.eq(target.data.view_as(pred)).sum()
-    test_loss /= len(test_loader.dataset)
-    test_accuracy = 100. * correct / len(test_loader.dataset)
-    return test_loss, test_accuracy
-
-epochs = 20
-for epoch in range(1, epochs + 1):
-    print('Epoch ', epoch)
-    train(model, criterion, optimizer, train_loader, epoch)
