@@ -1,7 +1,11 @@
+import torch
+import numpy as np
 import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
 
 def get_gradcam(model, image, target_class_index):
+        image = torch.unsqueeze(image, 0)
+
         # set the evaluation mode
         model.eval()
 
@@ -9,6 +13,7 @@ def get_gradcam(model, image, target_class_index):
         img = image
 
         # get the most likely prediction of the model
+        print('Img', img.shape)
         pred = model(img)
 
         # get the gradient of the output with respect to the parameters of the model
@@ -16,9 +21,8 @@ def get_gradcam(model, image, target_class_index):
 
         # pull the gradients out of the model
         gradients = model.get_activations_gradient()
-
         # pool the gradients across the channels
-        pooled_gradients = torch.mean(gradients, dim=[1, 2])
+        pooled_gradients = torch.mean(gradients, dim=[0, 2, 3])
 
         # get the activations of the last convolutional layer
         activations = model.get_activations(img).detach()

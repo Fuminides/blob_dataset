@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, transforms
+from torchvision import datasets, transforms, models
 import numpy as np
 from PIL import Image
 
@@ -163,4 +163,48 @@ def get_gradcam(model, image, target_class_index):
         heatmap /= torch.max(heatmap)
         
         return heatmap
+
+class MyResNet(nn.Module):
+
+    def __init__(self, num_class, end_dim=128):
+        super(MyResNet, self).__init__()
+
+        # Load pre-trained visual model
+        resnet = models.resnet50(pretrained=True)
+        self.visual_resnet = nn.Sequential(*list(resnet.children())[0:5])
+        self.avg_pooling_resnet = nn.Sequential(*list(resnet.children())[5:-2])
+
+        self.deep_feature_size = 512
+        # Classifier
+        self.classifier1 = nn.Sequential(nn.Linear(2048, self.deep_feature_size))
+        self.classifier2 = nn.Sequential(nn.Linear(self.deep_feature_size, num_class))
+
+        # Graph space encoder
+        self.nodeEmb = nn.Sequential(nn.Linear(2048, end_dim))
+      
+    def forward(self, img):
+        resnet_emb = self.visual_resnet(img)
+        if self.training:
+          h = resnet_emb.register_hook(self.activations_hook)
+
+        resnet_emb = self.avg_pooling_resnet(resnet_emb)
+        resnet_emb1 = resnet_emb.view(resnet_emb.size(0), -1)
+        pred_class = self.classifier1(resnet_emb1)
+        pred_class = self.classifier2(pred_class)
+        graph_proj = self.nodeEmb(resnet_emb1)
+
+        return pred_class
+      
+    def get_activations_gradient(self):
+        return self.gradients
+
+    # hook for the gradients of the activations
+    def activations_hook(self, grad):
+        self.gradients = grad
+      
+    def get_activations(self, x):
+      visual_emb = self.visual_resnet(x)
+      
+      return visual_emb
+
 
