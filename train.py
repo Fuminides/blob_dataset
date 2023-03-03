@@ -48,8 +48,6 @@ def train(model, criterion, optimizer, train_loader, epoch):
         optimizer.step()
 
 
-
-
 epochs = args.epochs
 for epoch in range(1, epochs + 1):
     print('Epoch ', epoch)

@@ -11,10 +11,19 @@ class BlobDataset(Dataset):
         self.transform = transform
         self.train = train
         self.labels = pd.read_csv(data_path + 'y_dataset.csv', index_col=0)
+
+        self.train_lim = int(0.8 * self.labels.shape[0])
+
     def __len__(self):
-        return len(self.data)
+        if self.train:
+            return self.train_lim
+        else:
+            return self.labels.shape[0] - self.train_lim
 
     def __getitem__(self, index):
+        if not self.train:
+            index += self.train_lim
+            
         image_path = self.data_path + str(index) + '.jpg'
         image = Image.open(image_path).convert('RGB')
         label = self.labels.loc[index]
