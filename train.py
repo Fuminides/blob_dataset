@@ -22,6 +22,7 @@ elif args.dataset == 'cifar10':
                          ]))
 elif args.dataset == 'blob':
     train_dataset = BlobDataset('../trials/', train=True, transform=transforms.ToTensor())
+
     
 
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
