@@ -1,3 +1,5 @@
+import argparse
+
 def gen_parser():
 	'''
 	Generates the parser.

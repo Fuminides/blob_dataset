@@ -8,6 +8,7 @@ from parser import gen_parser
 import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
 from gradcam import get_gradcam
+from blob_dataloader import BlobDataset
 
 # Parse the arguments
 parser = gen_parser()
@@ -28,7 +29,8 @@ elif args.dataset == 'cifar10':
                              transforms.ToTensor(),
                              transforms.Normalize((0.1307,), (0.3081,))
                          ]))
-
+elif args.dataset == 'blob':
+    dataset = BlobDataset('trials/', train=False)
 
 # Evaluate the model on the test data
 def test(model, test_loader):

@@ -31,11 +31,11 @@ def gen_one_blob(image, size=.2, sample_size=10000):
 
 
 def gen_big_blob(image, size_params):
-	return gen_one_blob(image, size=size_params['big'] * np.random.rand(1) + 0.5, sample_size=size_params['sample_size'])
+	return gen_one_blob(image, size=size_params['big'] * np.random.rand(1)[0] + 0.5, sample_size=size_params['sample_size'])
 
 
 def gen_small_blob(image, size_params):
-	return gen_one_blob(image, size=size_params['small'] * np.random.rand(1) + 0.5, sample_size=size_params['sample_size'])
+	return gen_one_blob(image, size=size_params['small'] * np.random.rand(1)[0] + 0.5, sample_size=size_params['sample_size'])
 
 
 def get_size_params(size):
@@ -135,10 +135,13 @@ def gen_dataset(instances, image_size, destination_path):
 if __name__ == '__main__':
 	import sys
 
-	dataset_size = int(sys.argv[1])
-	image_size = int(sys.argv[2])
+	# dataset_size = int(sys.argv[1])
+	# image_size = int(sys.argv[2])
 
-	print('Generating ' + str(dataset_size) + 'images of size ' + str(image_size) + 'x' + str(image_size) + '...')
+	dataset_size = 100
+	image_size = 32
+
+	print('Generating ' + str(dataset_size) + ' images of size ' + str(image_size) + 'x' + str(image_size) + '...')
 
 	gen_dataset(dataset_size, [image_size, image_size], './trials/')	
 

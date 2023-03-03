@@ -5,6 +5,7 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 import torch.nn.functional as F
 from parser import gen_parser
+from blob_dataloader import BlobDataset
 
 # Parse the arguments
 parser = gen_parser()
@@ -19,6 +20,8 @@ elif args.dataset == 'cifar10':
                              transforms.ToTensor(),
                              transforms.Normalize((0.1307,), (0.3081,))
                          ]))
+elif args.dataset == 'blob':
+    train_dataset = BlobDataset('../trials/', train=True, transform=transforms.ToTensor())
     
 
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
@@ -43,8 +46,6 @@ def train(model, criterion, optimizer, train_loader, epoch):
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
-
-
 
 
 epochs = args.epochs
