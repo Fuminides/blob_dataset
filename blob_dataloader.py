@@ -27,12 +27,14 @@ class BlobDataset(Dataset):
         image_path = self.data_path + str(index) + '.jpg'
         image = Image.open(image_path).convert('RGB')
         label = self.labels.loc[index]
-        label[0] = int(label[0])
 
         if self.transform is not None:
-            image = self.transform(image)
+          image = self.transform(image)
+          target = [torch.tensor(int(label[0])), torch.tensor(label[1])]
+        else:
+          target = [int(label[0]), label[1]]
 
-        return image, label
+        return image, target[0]
 
 
 # Assume the data is stored in a list called 'data'
