@@ -81,12 +81,4 @@ print('Epoch: {}/{} Test Loss: {:.4f} Test Accuracy: {:.2f}%'.format(
       epoch, epochs, test_loss, test_accuracy))
 
 
-print('Generating the gradcam maps...')
-train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=False)
-test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
-
-gen_gradcams(train_loader, args)
-gen_gradcams(test_loader, args)
-
-
 
