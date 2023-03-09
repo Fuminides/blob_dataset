@@ -51,11 +51,11 @@ def train(model, criterion, optimizer, train_loader, epoch):
         outputs = model(data)
         total_loss = None
         for i in range(len(target_list)):
-            target_list[i] = target_list[i].long()
+            # target_list[i] = target_list[i].long()
             if total_loss is None:
-                total_loss = criterion(outputs[i], target) / len(target_list)
+                total_loss = criterion(outputs[i], target_list[i]) / len(target_list)
             else:
-                total_loss += criterion(outputs[i], target) / len(target_list)
+                total_loss += criterion(outputs[i], target_list[i]) / len(target_list)
 
         total_loss.backward()
         optimizer.step()

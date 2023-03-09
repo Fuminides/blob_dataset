@@ -17,18 +17,13 @@ args = parser.parse_args()
 # Load the data
 if args.dataset == 'mnist':
     test_dataset = datasets.MNIST(root='.', train=False, transform=transforms.ToTensor(), download=True)
-    train_dataset = datasets.MNIST(root='.', train=True, transform=transforms.ToTensor(), download=True)
 elif args.dataset == 'cifar10':
     test_dataset = datasets.CIFAR10('data', train=False, download=True,
                          transform=transforms.Compose([
                              transforms.ToTensor(),
                              transforms.Normalize((0.1307,), (0.3081,))
                          ]))
-    train_dataset = datasets.CIFAR10('data', train=True, download=True,
-                         transform=transforms.Compose([
-                             transforms.ToTensor(),
-                             transforms.Normalize((0.1307,), (0.3081,))
-                         ]))
+ 
 elif args.dataset == 'blob':
     dataset = BlobDataset('trials/', train=False)
 
@@ -36,17 +31,21 @@ elif args.dataset == 'blob':
 def test(model, test_loader):
     model.eval()
     test_loss = 0
-    correct = 0
+    correct_size = 0
     with torch.no_grad():
         for data, target in test_loader:
-            output = model(data)
-            test_loss += criterion(output, target).item()
-            pred = output.data.max(1, keepdim=True)[1]
-            correct += pred.eq(target.data.view_as(pred)).sum()
-    test_loss /= len(test_loader.dataset)
-    test_accuracy = 100. * correct / len(test_loader.dataset)
+            output_number, output_size = model(data)
+            
+            pred_number = torch.argmax(output_number, dim=1)
+            pred_size = torch.argmax(output_size, dim=1)
 
-    return test_loss, test_accuracy
+            correct_number += torch.sum(pred_number == target[:, 0]).item()
+            correct_size += torch.sum(pred_size == target[:, 1]).item()
+
+    test_accuracy_number = 100. * correct_number / len(test_loader.dataset)        
+    test_accuracy_size = 100. * correct_size / len(test_loader.dataset)
+
+    return test_accuracy_number, test_accuracy_size
 
 
 def resize_transform(aux):
