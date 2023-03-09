@@ -25,24 +25,31 @@ elif args.dataset == 'cifar10':
                          ]))
  
 elif args.dataset == 'blob':
-    test_dataset = BlobDataset(args.dataset_path, train=False)
+    test_dataset = BlobDataset(args.dataset_path, train=False, transform=transforms.ToTensor())
 
 test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=True)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Evaluate the model on the test data
 def test(model, test_loader):
     model.eval()
-    test_loss = 0
+
+    correct_number = 0
     correct_size = 0
     with torch.no_grad():
         for data, target in test_loader:
+            data = data.to(device)
             output_number, output_size = model(data)
+            target_list = []
+            for target_x in target:
+                target_x = target_x.to(device)
+                target_list.append(target_x)
             
             pred_number = torch.argmax(output_number, dim=1)
             pred_size = torch.argmax(output_size, dim=1)
-            
-            correct_number += torch.sum(pred_number == target[:, 0]).item()
-            correct_size += torch.sum(pred_size == target[:, 1]).item()
+            print(target_list[0])
+            correct_number += torch.sum(pred_number == target_list[0]).item()
+            correct_size += torch.sum(pred_size == target_list[1]).item()
 
     test_accuracy_number = 100. * correct_number / len(test_loader.dataset)        
     test_accuracy_size = 100. * correct_size / len(test_loader.dataset)
@@ -76,7 +83,7 @@ def gen_gradcams(data_loader, parse):
 model = LeNet([args.image_size, args.image_size, 3], [4, 2])
 model.load_state_dict(torch.load(args.model_destination + 'model.pt'))
 model.eval()
-
+model = model.to(device)
 test_loss, test_accuracy = test(model, test_loader)
 print('Test Accuracy: {:.2f}%'.format(test_accuracy))
 
