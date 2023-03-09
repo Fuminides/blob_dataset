@@ -63,7 +63,7 @@ def gen_gradcams(data_loader, parse):
 
         for ix in range(data.shape[0]):
           img = data[ix]
-          resize_transform = 
+          # resize_transform = 
           aux = get_gradcam(model, img, target[ix])
           proyected_grad_cam = resize_transform(aux)
           res[img_idx] = proyected_grad_cam
