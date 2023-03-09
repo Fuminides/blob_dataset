@@ -34,7 +34,7 @@ class BlobDataset(Dataset):
         else:
           target = [int(label[0]), label[1]]
 
-        return image, target[0]
+        return image, target
 
 
 # Assume the data is stored in a list called 'data'

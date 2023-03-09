@@ -41,11 +41,23 @@ def train(model, criterion, optimizer, train_loader, epoch):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data = data.to(device)
-        target = target.to(device)
+        target_list = []
+        for target_x in target:
+            target_x = target_x.to(device)
+            target_list.append(target_x)
+
+        
         optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
-        loss.backward()
+        outputs = model(data)
+        total_loss = None
+        for i in range(len(target_list)):
+            target_list[i] = target_list[i].long()
+            if total_loss is None:
+                total_loss = criterion(outputs[i], target) / len(target_list)
+            else:
+                total_loss += criterion(outputs[i], target) / len(target_list)
+
+        total_loss.backward()
         optimizer.step()
 
 
