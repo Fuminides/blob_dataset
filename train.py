@@ -67,9 +67,12 @@ for epoch in range(1, epochs + 1):
 
 # Save the model
 from pathlib import Path
+
 file_path = args.model_destination
-if not file_path.exists():
-    file_path.mkdir(parents=True)
+path = Path(file_path)
+
+if not path.exists():
+    path.mkdir(parents=True)
     print("The path to ' + args.model_destination + 'was created.")
 
 torch.save(model.state_dict(), args.model_destination + 'model.pt')
