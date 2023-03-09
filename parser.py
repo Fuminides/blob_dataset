@@ -15,5 +15,5 @@ def gen_parser():
 	parser.add_argument('--batch_size', type=int, default=64, help='Batch size.')
 	parser.add_argument('--dataset', type=str, default='blob', help='Dataset to use. Options: mnist, cifar10, cifar100, blob.')
 	parser.add_argument('--grad_cam_output_path', type=str, default='grad_cam/', help='Path to save the grad cam images.')
-	parser.add_argument('--dataset_path', type=str, default='blob_dataset/', help='Path to the dataset.')
+	parser.add_argument('--dataset_path', type=str, default='../trials/', help='Path to the dataset.')
 	return parser

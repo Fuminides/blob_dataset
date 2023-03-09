@@ -21,7 +21,7 @@ elif args.dataset == 'cifar10':
                              transforms.Normalize((0.1307,), (0.3081,))
                          ]))
 elif args.dataset == 'blob':
-    train_dataset = BlobDataset('../trials/', train=True, transform=transforms.ToTensor())
+    train_dataset = BlobDataset(args.dataset_path, train=True, transform=transforms.ToTensor())
 
     
 
@@ -51,7 +51,6 @@ def train(model, criterion, optimizer, train_loader, epoch):
         outputs = model(data)
         total_loss = None
         for i in range(len(target_list)):
-            # target_list[i] = target_list[i].long()
             if total_loss is None:
                 total_loss = criterion(outputs[i], target_list[i]) / len(target_list)
             else:

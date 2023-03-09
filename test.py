@@ -25,7 +25,9 @@ elif args.dataset == 'cifar10':
                          ]))
  
 elif args.dataset == 'blob':
-    dataset = BlobDataset('trials/', train=False)
+    test_dataset = BlobDataset(args.dataset_path, train=False)
+
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=True)
 
 # Evaluate the model on the test data
 def test(model, test_loader):
@@ -38,7 +40,7 @@ def test(model, test_loader):
             
             pred_number = torch.argmax(output_number, dim=1)
             pred_size = torch.argmax(output_size, dim=1)
-
+            
             correct_number += torch.sum(pred_number == target[:, 0]).item()
             correct_size += torch.sum(pred_size == target[:, 1]).item()
 
@@ -76,8 +78,7 @@ model.load_state_dict(torch.load(args.model_destination + 'model.pt'))
 model.eval()
 
 test_loss, test_accuracy = test(model, test_loader)
-print('Epoch: {}/{} Test Loss: {:.4f} Test Accuracy: {:.2f}%'.format(
-      epoch, epochs, test_loss, test_accuracy))
+print(Test Accuracy: {:.2f}%'.format(test_accuracy))
 
 
 
