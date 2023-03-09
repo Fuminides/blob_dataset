@@ -73,12 +73,12 @@ def gen_gradcams(data_loader, parse):
 
           
 # Load the model
-model = LeNet([args.image_size, args.image_size, 3], 512)
+model = LeNet([args.image_size, args.image_size, 3], [4, 2])
 model.load_state_dict(torch.load(args.model_destination + 'model.pt'))
 model.eval()
 
 test_loss, test_accuracy = test(model, test_loader)
-print(Test Accuracy: {:.2f}%'.format(test_accuracy))
+print('Test Accuracy: {:.2f}%'.format(test_accuracy))
 
 
 
