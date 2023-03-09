@@ -36,8 +36,11 @@ class LeNet(nn.Module):
         flattened_size = int((input_size[0] / (2 * 2)) * (input_size[1] / (2 * 2))) * num_filters[1]
         self.fc_0 = nn.Linear(flattened_size, fc_sizes[0], bias=True)
         self.fc_1 = nn.Linear(fc_sizes[0], fc_sizes[1], bias=True)
-        self.fc_2 = nn.Linear(fc_sizes[1], output_size, bias=True)
+        self.fc_2 = nn.Linear(fc_sizes[1], output_size[0], bias=True)
+        self.fc_2_task2 = nn.Linear(fc_sizes[1], output_size[1], bias=True)    
         self.dropout1d = nn.Dropout(p=dropout)
+
+
 
     def forward(self, x):
         output_block_0 = self.pool_0(self.relu(self.conv_0(x)))
@@ -58,7 +61,13 @@ class LeNet(nn.Module):
         output_fc_1 = self.relu(self.fc_1(output_fc_0))
         output_fc_1 = self.dropout1d(output_fc_1)
         predictions = self.fc_2(output_fc_1)  # Softmax will be applied to this value
-        return predictions
+
+        output_fc_1 = self.dropout1d(output_fc_1)
+        predictions_task1 = self.fc_2(output_fc_1)  # Softmax will be applied to this value
+        predictions_task2 = self.fc_2_task2(output_fc_1)  # Softmax will be applied to this value
+
+
+        return predictions_task1, predictions_task2
       
     def get_activations_gradient(self):
         return self.gradients

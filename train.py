@@ -28,7 +28,7 @@ elif args.dataset == 'blob':
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
 
 # Define the model
-model = LeNet([args.image_size, args.image_size, 3], 512)
+model = LeNet([args.image_size, args.image_size, 3], [4, 2])
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
