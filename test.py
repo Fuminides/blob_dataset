@@ -47,7 +47,6 @@ def test(model, test_loader):
             
             pred_number = torch.argmax(output_number, dim=1)
             pred_size = torch.argmax(output_size, dim=1)
-            print(target_list[0])
             correct_number += torch.sum(pred_number == target_list[0]).item()
             correct_size += torch.sum(pred_size == target_list[1]).item()
 

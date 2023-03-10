@@ -73,6 +73,6 @@ path = Path(file_path)
 
 if not path.exists():
     path.mkdir(parents=True)
-    print("The path to ' + args.model_destination + 'was created.")
+    print('The path to ' + args.model_destination + ' was created.')
 
 torch.save(model.state_dict(), args.model_destination + 'model.pt')
