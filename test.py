@@ -84,8 +84,8 @@ model = LeNet([args.image_size, args.image_size, 3], [4, 2])
 model.load_state_dict(torch.load(args.model_destination + 'model.pt'))
 model.eval()
 model = model.to(device)
-test_loss, test_accuracy = test(model, test_loader)
-print('Test Accuracy: {:.2f}%'.format(test_accuracy))
+number_accuracy, size_accuracy = test(model, test_loader)
+print('Test Accuracy: {:.2f}%'.format(number_accuracy))
 
 
 
