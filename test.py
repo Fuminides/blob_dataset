@@ -84,7 +84,8 @@ model.load_state_dict(torch.load(args.model_destination + 'model.pt'))
 model.eval()
 model = model.to(device)
 number_accuracy, size_accuracy = test(model, test_loader)
-print('Test Accuracy: {:.2f}%'.format(number_accuracy))
+print('Test Number blobs accuracy: {:.2f}%'.format(number_accuracy))
+print('Test Size accuracy: {:.2f}%'.format(size_accuracy))
 
 
 
