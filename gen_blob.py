@@ -49,6 +49,8 @@ def get_size_params(size):
 		return {'sample_size': 10000, 'small': 0.2, 'big': 5}
 	elif np.equal(size, [56, 56]).all():
 		return {'sample_size': 10000, 'small': 0.2, 'big': 5}
+	elif np.equal(size, [224, 224]).all():
+		return {'sample_size': 10000, 'small': 20, 'big': 250}
 	elif np.equal(size, [256, 256]).all():
 		return {'sample_size': 100000, 'small': 30, 'big': 300}
 
