@@ -137,12 +137,14 @@ def gen_dataset(instances, image_size, destination_path):
 if __name__ == '__main__':
 	import sys
 
-	# dataset_size = int(sys.argv[1])
-	# image_size = int(sys.argv[2])
-
-	dataset_size = 100
-	image_size = 56
-
+	try:
+		dataset_size = int(sys.argv[1])
+		image_size = int(sys.argv[2])
+	except:
+		print('Using default parameters...')
+		dataset_size = 100
+		image_size = 56
+		
 	print('Generating ' + str(dataset_size) + ' images of size ' + str(image_size) + 'x' + str(image_size) + '...')
 
 	gen_dataset(dataset_size, [image_size, image_size], './trials/')	
