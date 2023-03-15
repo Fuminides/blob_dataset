@@ -6,6 +6,7 @@ from PIL import Image
 
 class BlobDataset(Dataset):
 
+
     def __init__(self, data_path, train, transform=None):
         self.data_path = data_path
         self.transform = transform
@@ -14,11 +15,13 @@ class BlobDataset(Dataset):
 
         self.train_lim = int(0.8 * self.labels.shape[0])
 
+
     def __len__(self):
         if self.train:
             return self.train_lim
         else:
             return self.labels.shape[0] - self.train_lim
+
 
     def __getitem__(self, index):
         if not self.train:

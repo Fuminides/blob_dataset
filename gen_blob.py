@@ -47,6 +47,8 @@ def get_size_params(size):
 	'''
 	if np.equal(size, [32, 32]).all():
 		return {'sample_size': 10000, 'small': 0.2, 'big': 5}
+	elif np.equal(size, [56, 56]).all():
+		return {'sample_size': 10000, 'small': 0.2, 'big': 5}
 	elif np.equal(size, [256, 256]).all():
 		return {'sample_size': 100000, 'small': 30, 'big': 300}
 
@@ -139,7 +141,7 @@ if __name__ == '__main__':
 	# image_size = int(sys.argv[2])
 
 	dataset_size = 100
-	image_size = 32
+	image_size = 56
 
 	print('Generating ' + str(dataset_size) + ' images of size ' + str(image_size) + 'x' + str(image_size) + '...')
 
