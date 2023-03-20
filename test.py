@@ -16,7 +16,7 @@ args = parser.parse_args()
 
 # Load the data
 if args.dataset == 'mnist':
-    test_dataset = datasets.MNIST(root='.', train=False, transform=transforms.ToTensor(), download=True)
+    test_dataset = datasets.MNIST(root='.', train=False, transform=transforms.Compose([transforms.Grayscale(), transforms.ToTensor()]), download=True)
 elif args.dataset == 'cifar10':
     test_dataset = datasets.CIFAR10('data', train=False, download=True,
                          transform=transforms.Compose([
@@ -25,7 +25,7 @@ elif args.dataset == 'cifar10':
                          ]))
  
 elif args.dataset == 'blob':
-    test_dataset = BlobDataset(args.dataset_path, train=False, transform=transforms.ToTensor())
+    test_dataset = BlobDataset(args.dataset_path, train=False, transform=transforms.Compose([transforms.Grayscale(), transforms.ToTensor()]))
 
 test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=True)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
