@@ -79,7 +79,7 @@ def gen_gradcams(data_loader, parse):
 
           
 # Load the model
-model = LeNet([args.image_size, args.image_size, 3], [4, 2])
+model = LeNet([args.image_size, args.image_size, 1], [4, 2])
 model.load_state_dict(torch.load(args.model_destination + 'model.pt'))
 model.eval()
 model = model.to(device)
