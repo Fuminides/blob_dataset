@@ -21,14 +21,14 @@ elif args.dataset == 'cifar10':
                              transforms.Normalize((0.1307,), (0.3081,))
                          ]))
 elif args.dataset == 'blob':
-    train_dataset = BlobDataset(args.dataset_path, train=True, transform=transforms.ToTensor())
+    train_dataset = BlobDataset(args.dataset_path, train=True, transform=transforms.Compose([transforms.Grayscale(), transforms.ToTensor()]))
 
     
 
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
 
 # Define the model
-model = LeNet([args.image_size, args.image_size, 3], [4, 2])
+model = LeNet([args.image_size, args.image_size, 1], [4, 2])
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
